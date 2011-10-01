@@ -6,6 +6,7 @@ from functools import wraps
 import hashlib
 import hmac
 import json
+import urllib
 from fb.utils.base64utils import base64_url_decode, base64_url_encode
 
 def facebook_app_auth(view_func):
