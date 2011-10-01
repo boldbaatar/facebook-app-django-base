@@ -33,10 +33,10 @@ def facebook_app_auth(view_func):
                         return view_func(request, *args, **kwargs)
                     else:
                         data = urllib.urlencode({
-                                'scope': 'email',
-                                'client_id': settings.FACEBOOK_APP_ID,
-                                'redirect_uri': settings.FACEBOOK_APPS_URI + settings.FACEBOOK_APP_NAMESPACE + request.get_full_path(),
-                                'response_type': 'token',
+                            'scope': 'email',
+                            'client_id': settings.FACEBOOK_APP_ID,
+                            'redirect_uri': settings.FACEBOOK_APPS_URI + settings.FACEBOOK_APP_NAMESPACE + request.get_full_path(),
+                            'response_type': 'token',
                         })
                         encoded_url = settings.FACEBOOK_LOGIN_URI + '?' + data
                         return HttpResponse("<script>top.location.href='" + encoded_url + "'</script>")
@@ -48,9 +48,23 @@ def facebook_app_auth(view_func):
             if request.user:
                 user_profile = request.user.get_profile()
                 if user_profile.access_token_expired():
+                    data = urllib.urlencode({
+                        'scope': 'email',
+                        'client_id': settings.FACEBOOK_APP_ID,
+                        'redirect_uri': settings.FACEBOOK_APPS_URI + settings.FACEBOOK_APP_NAMESPACE + request.get_full_path(),
+                        'response_type': 'token',
+                    })
+                    encoded_url = settings.FACEBOOK_LOGIN_URI + '?' + data
                     return HttpResponse("<script>top.location.href='" + encoded_url + "'</script>")
                 else:
                     return view_func(request, *args, **kwargs)
             else:
+                data = urllib.urlencode({
+                    'scope': 'email',
+                    'client_id': settings.FACEBOOK_APP_ID,
+                    'redirect_uri': settings.FACEBOOK_APPS_URI + settings.FACEBOOK_APP_NAMESPACE + request.get_full_path(),
+                    'response_type': 'token',
+                })
+                encoded_url = settings.FACEBOOK_LOGIN_URI + '?' + data
                 return HttpResponse("<script>top.location.href='" + encoded_url + "'</script>")
     return decorator
